@@ -8,6 +8,22 @@ you browse web pages by compressing all images on the page. It uses
 [data compression service](https://github.com/ayastreb/bandwidth-hero-proxy) to convert images to
 low-resolution [WebP](https://developers.google.com/speed/webp/) or JPEG images.
 
+## Manifest V3 Migration
+
+This extension has been migrated to Manifest V3 (version 3.0.0+). The migration includes:
+
+- ✅ Updated to Manifest Version 3
+- ✅ Converted background page to service worker
+- ✅ Replaced `browser_action` with `action` API
+- ✅ Updated permissions structure (separated host permissions)
+- ✅ Removed DOM dependencies from background script
+- ✅ Added automated GitHub Actions workflows
+
+**Known Limitations:**
+Due to Manifest V3 restrictions on blocking `webRequest`, the image interception functionality has limited capabilities compared to V2. The extension now uses non-blocking `webRequest` for observation and statistics tracking. The CSP header modification continues to work with host permissions.
+
+For users who need full functionality, the Manifest V2 version remains available in the `src/background-mv2.js` file and can be built by reverting the manifest changes.
+
 ## How It Works?
 
 ![Workflow](https://raw.githubusercontent.com/ayastreb/bandwidth-hero/master/how-it-works.png)
