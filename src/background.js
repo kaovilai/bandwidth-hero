@@ -213,6 +213,31 @@ function onHeadersReceivedListener({ responseHeaders }) {
     }
 }
 
+/**
+ * Firefox user agent check
+ * Must be defined before listener registration
+ */
+function isFirefox() {
+    return /rv\:.*Gecko/.test(self.navigator.userAgent)
+}
+
+/**
+ * Builds up a redirect URL for image compression.
+ * NOTE: In MV3, this function is not actively used due to blocking webRequest limitations.
+ * Kept for reference and potential future use with declarativeNetRequest.
+ * @param url - Original image URL
+ * @returns {string} - Compression proxy URL with parameters
+ */
+function buildCompressUrl(url) {
+    let redirectUrl = '';
+    redirectUrl += state.proxyUrl;
+    redirectUrl += `?url=${encodeURIComponent(url)}`;
+    redirectUrl += `&jpeg=${state.isWebpSupported ? 0 : 1}`;
+    redirectUrl += `&bw=${state.convertBw ? 1 : 0}`;
+    redirectUrl += `&l=${state.compressionLevel}`;
+    return redirectUrl;
+}
+
 // Register all listeners at top level (required for service workers)
 // MV3 limitation: Cannot use blocking webRequest for image redirects
 // This listener is non-blocking and only used for observation
@@ -248,10 +273,3 @@ chrome.tabs.onActivated.addListener(onTabActivated)
 chrome.tabs.onUpdated.addListener(onTabUpdated)
 
 chrome.storage.onChanged.addListener(onStateChanged)
-
-/**
- * Firefox user agent check
- */
-function isFirefox() {
-    return /rv\:.*Gecko/.test(self.navigator.userAgent)
-}
