@@ -5,6 +5,8 @@ import parseUrl from './utils/parseUrl'
 import deferredStateStorage from './utils/deferredStateStorage'
 import defaultState from './defaults'
 import isPrivateNetwork from './background/isPrivateNetwork';
+// Note: axios dependency removed as it was only used in MV2 for Firefox HEAD requests
+// which are not supported in the MV3 non-blocking webRequest implementation
 
 // Handle update from previous versions
 chrome.runtime.onInstalled.addListener(({ reason, previousVersion }) => {
@@ -135,7 +137,7 @@ function onInstalled() {
  * A full solution would require content scripts to intercept image loads
  * or accepting the MV3 limitations.
  */
-function onBeforeRequestListener({ url, documentUrl, type, tabId }) {
+function onBeforeRequestListener({ url, documentUrl, type }) {
     checkSetup();
 
     const pageUrl = currentPageUrl || parseUrl(documentUrl).host;
@@ -212,6 +214,8 @@ function onHeadersReceivedListener({ responseHeaders }) {
 }
 
 // Register all listeners at top level (required for service workers)
+// MV3 limitation: Cannot use blocking webRequest for image redirects
+// This listener is non-blocking and only used for observation
 chrome.webRequest.onBeforeRequest.addListener(
     onBeforeRequestListener,
     {
