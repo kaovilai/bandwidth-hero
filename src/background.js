@@ -192,7 +192,7 @@ function onTabActivated({tabId}) {
 // If we navigate to a new page within a tab and it is the same we have a
 // bug where it does not process images. Because the images are still in
 // compressed even though the page changed. With onTabUpdated we reset this.
-function onTabUpdated(){
+function onTabUpdated(tabId, changeInfo, tab){
   compressed.clear()
 }
 
@@ -206,7 +206,8 @@ function onTabUpdated(){
  */
 function onHeadersReceivedListener({ responseHeaders }) {
     if (!state.proxyUrl) {
-        return {}
+        // No proxy configured, return unmodified headers
+        return { responseHeaders }
     }
     return {
         responseHeaders: patchContentSecurity(responseHeaders, state.proxyUrl)

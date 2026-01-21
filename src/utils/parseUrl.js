@@ -8,7 +8,7 @@ export default url => {
       pathname: parser.pathname,
       search: parser.search,
       hash: parser.hash,
-      host: parser.hostname
+      host: parser.hostname  // Alias for backward compatibility with MV2 code
     }
   } catch (e) {
     // Fallback for invalid URLs
