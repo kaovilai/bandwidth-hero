@@ -1,13 +1,25 @@
 export default url => {
-  const parser = document.createElement('a')
-  parser.href = url
-
-  return {
-    schema: parser.protocol,
-    hostname: parser.hostname,
-    port: parser.port,
-    pathname: parser.pathname,
-    search: parser.search,
-    hash: parser.hash
+  try {
+    const parser = new URL(url)
+    return {
+      schema: parser.protocol,
+      hostname: parser.hostname,
+      port: parser.port,
+      pathname: parser.pathname,
+      search: parser.search,
+      hash: parser.hash,
+      host: parser.hostname
+    }
+  } catch (e) {
+    // Fallback for invalid URLs
+    return {
+      schema: '',
+      hostname: '',
+      port: '',
+      pathname: '',
+      search: '',
+      hash: '',
+      host: ''
+    }
   }
 }

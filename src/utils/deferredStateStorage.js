@@ -5,9 +5,9 @@ export default (delay = 1000) => {
   return {
     set(state) {
       if (pendingState === null) {
-        timerId = window.setTimeout(() => {
+        timerId = self.setTimeout(() => {
           chrome.storage.local.set(pendingState, () => {
-            window.clearTimeout(timerId)
+            self.clearTimeout(timerId)
             pendingState = null
           })
         }, delay)
